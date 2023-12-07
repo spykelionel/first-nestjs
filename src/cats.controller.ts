@@ -16,13 +16,13 @@ export class CatsController {
   constructor(private readonly catService: CatService) {}
   @Get()
   @Bind(Req())
-  findAll(): string {
+  findAll() {
     return this.catService.findAll();
   }
 
   @Post()
   @HttpCode(201)
   create(@Body() catDto: CreateCatDto) {
-    return `Create post ${JSON.stringify(catDto)}`;
+    return this.catService.create(catDto);
   }
 }
