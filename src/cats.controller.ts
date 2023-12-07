@@ -9,19 +9,20 @@ import {
   Body,
 } from '@nestjs/common';
 import { CreateCatDto } from './create-catDto';
+import { CatService } from './cats.service';
 
 @Controller('cats')
 export class CatsController {
+  constructor(private readonly catService: CatService) {}
   @Get()
   @Bind(Req())
   findAll(): string {
-    return 'This should return all cats';
+    return this.catService.findAll();
   }
 
   @Post()
-  @HttpCode(204)
-  @Header('cache-control', 'none')
+  @HttpCode(201)
   create(@Body() catDto: CreateCatDto) {
-    return 'Create post ';
+    return `Create post ${JSON.stringify(catDto)}`;
   }
 }
