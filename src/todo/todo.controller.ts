@@ -11,8 +11,8 @@ export default class TodoController {
     return this.todoService.getAll();
   }
 
-  @Get('id')
-  getSingleTodo(@Param('id') id: number): Todo {
+  @Get(':id')
+  getSingleTodo(@Param('id') id: number): CreateTodoDTO {
     return this.todoService.getSingleTodo(id);
   }
 
