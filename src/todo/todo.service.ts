@@ -30,8 +30,8 @@ export default class TodoService {
     this.todos.push({ ...createTodoDto, id: this.todos.length + 1 });
   }
 
-  getSingleTodo(id: number): Todo {
-    const todo = this.todos.find((t) => t.id === id);
+  getSingleTodo(id: number): CreateTodoDTO {
+    const todo: Todo = this.todos.find((t) => t.id === id);
     return todo;
   }
 }
