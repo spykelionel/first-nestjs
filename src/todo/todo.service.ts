@@ -26,8 +26,10 @@ export default class TodoService {
     return this.todos;
   }
 
-  creatTodo(createTodoDto: CreateTodoDTO) {
-    this.todos.push({ ...createTodoDto, id: this.todos.length + 1 });
+  creatTodo(createTodoDto: CreateTodoDTO): CreateTodoDTO {
+    const newTodo = { ...createTodoDto, id: this.todos.length + 1 };
+    this.todos.push(newTodo);
+    return newTodo;
   }
 
   getSingleTodo(id: number): CreateTodoDTO {
