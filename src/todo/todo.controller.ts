@@ -18,6 +18,6 @@ export default class TodoController {
 
   @Post()
   createTodo(@Body() createTodoDto: CreateTodoDTO) {
-    this.todoService.creatTodo(createTodoDto);
+    return this.todoService.creatTodo(createTodoDto);
   }
 }

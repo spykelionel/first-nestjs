@@ -27,7 +27,11 @@ export default class TodoService {
   }
 
   creatTodo(createTodoDto: CreateTodoDTO): CreateTodoDTO {
-    const newTodo = { ...createTodoDto, id: this.todos.length + 1 };
+    const newTodo: Todo = {
+      ...createTodoDto,
+      status: 'pending',
+      id: this.todos.length + 1,
+    };
     this.todos.push(newTodo);
     return newTodo;
   }
