@@ -8,16 +8,16 @@ export default class TodoController {
   constructor(private readonly todoService: TodoService) {}
   @Get()
   getAll(): Todo[] {
-    return this.todoService.getAll();
+    return this.todoService.getAllTodos();
   }
 
   @Get(':id')
   getSingleTodo(@Param('id') id: number): CreateTodoDTO {
-    return this.todoService.getSingleTodo(id);
+    return this.todoService.getTodoById(id);
   }
 
   @Post()
   createTodo(@Body() createTodoDto: CreateTodoDTO) {
-    return this.todoService.creatTodo(createTodoDto);
+    return this.todoService.createTodo(createTodoDto);
   }
 }
