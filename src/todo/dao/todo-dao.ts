@@ -1,29 +1,11 @@
 import { Todo } from '../Todo';
 import CreateTodoDTO from '../dto/create-todo.dto';
+import { UpdateTodoDTO } from '../dto/update-todo.dto';
 
-export interface TodoDAO {
+export interface ITodoDAO {
   getTodoById(id: number): Todo | undefined;
   createTodo(todo: CreateTodoDTO): CreateTodoDTO;
   deleteTodo(todo: Todo): Todo;
-  updateTodo(todo: Todo): Todo;
+  updateTodo(id: number, payload: UpdateTodoDTO): Todo | undefined | string;
   getAllTodos(): Todo[];
-}
-
-class TodoService implements TodoDAO {
-  constructor() {}
-  getTodoById(id: number): Todo {
-    throw new Error('Method not implemented.');
-  }
-  createTodo(todo: CreateTodoDTO): Todo {
-    throw new Error('Method not implemented.');
-  }
-  deleteTodo(todo: Todo): Todo {
-    throw new Error('Method not implemented.');
-  }
-  updateTodo(todo: Todo): Todo {
-    throw new Error('Method not implemented.');
-  }
-  getAllTodos(): Todo[] {
-    throw new Error('Method not implemented.');
-  }
 }
