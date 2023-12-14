@@ -1,3 +1,6 @@
 import CreateTodoDTO from './create-todo.dto';
 
-class UpdateTodoDTO extends CreateTodoDTO {}
+export class UpdateTodoDTO extends CreateTodoDTO {
+  status: 'pending' | 'completed';
+  title: string;
+}
