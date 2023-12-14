@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Todo } from './Todo';
 import CreateTodoDTO from './dto/create-todo.dto';
+import { TodoDAO } from './dao/todo-dao';
+import { UpdateTodoDTO } from './dto/update-todo.dto';
 
 const init: Todo[] = [
   {
@@ -20,13 +22,35 @@ const init: Todo[] = [
   },
 ];
 @Injectable()
-export default class TodoService {
+export default class TodoService implements TodoDAO {
+  deleteTodo(todo: Todo): Todo {
+    throw new Error('Method not implemented.');
+  }
+  updateTodo<K extends keyof UpdateTodoDTO>(
+    id: number,
+    payload: Pick<UpdateTodoDTO, K>,
+  ): Todo | undefined | TypeError {
+    const todo = this.todos.find((t) => t.id === id);
+    if (!todo) return undefined;
+
+    try {
+      for (const key in payload) {
+        if (payload.hasOwnProperty(key)) {
+          if (todo.hasOwnProperty(key)) {
+            (todo as any)[key] = (payload as any)[key];
+          }
+        }
+      }
+    } catch (error: any) {
+      throw new TypeError(error);
+    }
+  }
   private readonly todos: Todo[] = init;
-  getAll(): Todo[] {
+  getAllTodos(): Todo[] {
     return this.todos;
   }
 
-  creatTodo(createTodoDto: CreateTodoDTO): CreateTodoDTO {
+  createTodo(createTodoDto: CreateTodoDTO): CreateTodoDTO {
     const newTodo: Todo = {
       ...createTodoDto,
       status: 'pending',
@@ -36,8 +60,11 @@ export default class TodoService {
     return newTodo;
   }
 
-  getSingleTodo(id: number): CreateTodoDTO {
+  getTodoById(id: number): CreateTodoDTO | undefined {
     const todo: Todo = this.todos.find((t) => t.id === id);
+    if (todo === undefined) {
+      return undefined;
+    }
     return todo;
   }
 }
