@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Todo } from './Todo';
 import CreateTodoDTO from './dto/create-todo.dto';
-import { TodoDAO } from './dao/todo-dao';
+import { ITodoDAO } from './dao/todo-dao';
 import { UpdateTodoDTO } from './dto/update-todo.dto';
 
 const init: Todo[] = [
@@ -22,14 +22,16 @@ const init: Todo[] = [
   },
 ];
 @Injectable()
-export default class TodoService implements TodoDAO {
+export default class TodoService implements ITodoDAO {
+  private readonly todos: Todo[] = init;
+
   deleteTodo(todo: Todo): Todo {
     throw new Error('Method not implemented.');
   }
   updateTodo<K extends keyof UpdateTodoDTO>(
     id: number,
     payload: Pick<UpdateTodoDTO, K>,
-  ): Todo | undefined | TypeError {
+  ): Todo | undefined | string {
     const todo = this.todos.find((t) => t.id === id);
     if (!todo) return undefined;
 
@@ -41,11 +43,13 @@ export default class TodoService implements TodoDAO {
           }
         }
       }
+      return todo;
     } catch (error: any) {
-      throw new TypeError(error);
+      const updateError = new TypeError(error);
+      return updateError.message;
     }
   }
-  private readonly todos: Todo[] = init;
+
   getAllTodos(): Todo[] {
     return this.todos;
   }
