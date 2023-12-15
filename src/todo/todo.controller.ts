@@ -8,22 +8,27 @@ import { UpdateTodoDTO } from './dto/update-todo.dto';
 export default class TodoController {
   constructor(private readonly todoService: TodoService) {}
   @Get()
-  getAll(): Todo[] {
-    return this.todoService.getAllTodos();
+  getAll() {
+    return this.todoService.findAllTodos();
   }
 
   @Get(':id')
-  getSingleTodo(@Param('id') id: number): CreateTodoDTO {
-    return this.todoService.getTodoById(id);
+  getSingleTodo(@Param('id') id: number) {
+    return this.todoService.getSingleTodo(id);
   }
 
   @Post()
-  createTodo(@Body() createTodoDto: CreateTodoDTO): Todo {
-    return this.todoService.createTodo(createTodoDto);
+  createTodo(@Body() createTodoDto: CreateTodoDTO) {
+    return this.todoService.addTodo(createTodoDto);
   }
 
   @Put(':id')
   updateTodo(@Param('id') id: number, payload: UpdateTodoDTO): Todo | String {
     return this.todoService.updateTodo(id, payload);
+  }
+
+  @Post('many')
+  createMany() {
+    return this.todoService.createMany();
   }
 }
