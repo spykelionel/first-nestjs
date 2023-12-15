@@ -3,26 +3,30 @@ import { Todo } from './Todo';
 import CreateTodoDTO from './dto/create-todo.dto';
 import { ITodoDAO } from './dao/todo-dao';
 import { UpdateTodoDTO } from './dto/update-todo.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Todo as ETodo } from './todo.entity';
+import { Repository } from 'typeorm';
 
-const init: Todo[] = [
+const init: CreateTodoDTO[] = [
   {
-    title: 'A todo',
+    title: 'Todo from my app 1',
     status: 'pending',
-    id: 1,
   },
   {
-    title: 'A todo',
+    title: 'A todo from my app 2',
     status: 'pending',
-    id: 2,
   },
   {
-    title: 'A todo',
+    title: 'Another todo from my app 3',
     status: 'pending',
-    id: 3,
   },
 ];
 @Injectable()
 export default class TodoService implements ITodoDAO {
+  constructor(
+    @InjectRepository(ETodo)
+    private todoRepository: Repository<ETodo>,
+  ) {}
   private readonly todos: Todo[] = init;
 
   deleteTodo(todo: Todo): Todo {
@@ -54,6 +58,14 @@ export default class TodoService implements ITodoDAO {
     return this.todos;
   }
 
+  findAllTodos(): Promise<ETodo[]> {
+    return this.todoRepository.find();
+  }
+
+  addTodo(createTodoDto: CreateTodoDTO) {
+    return this.todoRepository.insert(createTodoDto);
+  }
+
   createTodo(createTodoDto: CreateTodoDTO): CreateTodoDTO {
     const newTodo: Todo = {
       ...createTodoDto,
@@ -70,5 +82,18 @@ export default class TodoService implements ITodoDAO {
       return undefined;
     }
     return todo;
+  }
+
+  /**
+   * This implementation doesn't work. Currently at least.
+   */
+  createMany() {
+    return this.todoRepository.manager.transaction(async (manager) => {
+      manager.save(init);
+    });
+  }
+
+  getSingleTodo(id: number): Promise<ETodo> | string {
+    return this.todoRepository.findOneBy({ id: id });
   }
 }
