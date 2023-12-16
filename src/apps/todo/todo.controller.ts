@@ -37,9 +37,4 @@ export default class TodoController {
   updateTodo(@Param('id') id: number, @Body() payload: UpdateTodoDTO) {
     return this.todoService.updateSingleTodo(id, payload);
   }
-
-  @Post('many')
-  createMany() {
-    return this.todoService.createMany();
-  }
 }

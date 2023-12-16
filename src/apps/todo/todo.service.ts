@@ -6,6 +6,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Todo as ETodo } from './data/todo.entity';
 import { DeleteResult, InsertResult, Repository, UpdateResult } from 'typeorm';
 
+/**
+ * A dummy structure of a todo
+ */
 const init: CreateTodoDTO[] = [
   {
     title: 'Todo from my app 1',
@@ -33,11 +36,6 @@ export default class TodoService implements ITodoDAO {
   ) {}
   private readonly todos: Todo[] = init;
 
-  /**
-   *
-   * @param id The id of the todo to be deleted
-   * @returns Delete results
-   */
   deleteTodo(id: number): Promise<DeleteResult> {
     return this.todoRepository
       .createQueryBuilder()
@@ -46,13 +44,6 @@ export default class TodoService implements ITodoDAO {
       .execute();
   }
 
-  /**
-   * This is a native implementation of the update(todo) method.
-   * It updates just the fields specified in the payload.
-   * @param id The id of the todo to be updated
-   * @param payload The new todo object
-   * @returns an updated Todo
-   */
   updateTodo<K extends keyof UpdateTodoDTO>(
     id: number,
     payload: Pick<UpdateTodoDTO, K>,
@@ -75,14 +66,7 @@ export default class TodoService implements ITodoDAO {
     }
   }
 
-  /**
-   *
-   * @param id The id of the todo to be updated
-   * @param payload The new todo object
-   * @returns Promise<UpdateResult>
-   */
   updateSingleTodo(id: number, payload: UpdateTodoDTO): Promise<UpdateResult> {
-    // Ensure that payload is an object with at least one field set
     if (Object.keys(payload).length === 0) {
       return Promise.reject(
         new Error('Update payload must have at least one field set.'),
@@ -97,38 +81,14 @@ export default class TodoService implements ITodoDAO {
       .execute();
   }
 
-  /**
-   *
-   * @returns A promise that resolves to all Todos.
-   */
   findAllTodos(): Promise<ETodo[]> {
     return this.todoRepository.find();
   }
 
-  /**
-   *
-   * @param createTodoDto The todo object to be created
-   * @returns Insert results
-   */
   addTodo(createTodoDto: CreateTodoDTO): Promise<InsertResult> {
     return this.todoRepository.insert(createTodoDto);
   }
 
-  /**
-   * This implementation doesn't work. Currently at least.
-   * It is meant for transactions. Uploading several todos.
-   */
-  createMany() {
-    return this.todoRepository.manager.transaction(async (manager) => {
-      init.forEach(async (value) => await manager.save(value));
-    });
-  }
-
-  /**
-   * A method to return a single todo from the database
-   * @param id A unique integer representing the Id of the todo.
-   * @returns (Todo) A single todo item from the database
-   */
   getSingleTodo(id: number): Promise<ETodo> | undefined {
     return this.todoRepository.findOneBy({ id: id });
   }
