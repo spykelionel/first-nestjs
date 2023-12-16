@@ -32,6 +32,7 @@ export default class TodoService implements ITodoDAO {
   deleteTodo(todo: Todo): Todo {
     throw new Error('Method not implemented.');
   }
+
   updateTodo<K extends keyof UpdateTodoDTO>(
     id: number,
     payload: Pick<UpdateTodoDTO, K>,
@@ -54,8 +55,8 @@ export default class TodoService implements ITodoDAO {
     }
   }
 
-  getAllTodos(): Todo[] {
-    return this.todos;
+  updateSingleTodo(id: number, payload: UpdateTodoDTO) {
+    return this.todoRepository.update({ id: id }, payload);
   }
 
   findAllTodos(): Promise<ETodo[]> {
@@ -66,34 +67,22 @@ export default class TodoService implements ITodoDAO {
     return this.todoRepository.insert(createTodoDto);
   }
 
-  createTodo(createTodoDto: CreateTodoDTO): CreateTodoDTO {
-    const newTodo: Todo = {
-      ...createTodoDto,
-      status: 'pending',
-      id: this.todos.length + 1,
-    };
-    this.todos.push(newTodo);
-    return newTodo;
-  }
-
-  getTodoById(id: number): CreateTodoDTO | undefined {
-    const todo: Todo = this.todos.find((t) => t.id === id);
-    if (todo === undefined) {
-      return undefined;
-    }
-    return todo;
-  }
-
   /**
    * This implementation doesn't work. Currently at least.
+   * It is meant for transactions. Uploading several todos.
    */
   createMany() {
     return this.todoRepository.manager.transaction(async (manager) => {
-      manager.save(init);
+      init.forEach(async (value) => await manager.save(value));
     });
   }
 
-  getSingleTodo(id: number): Promise<ETodo> | string {
+  /**
+   * A method to return a single todo from the database
+   * @param id A unique integer representing the Id of the todo.
+   * @returns (Todo) A single todo item from the database
+   */
+  getSingleTodo(id: number): Promise<ETodo> | undefined {
     return this.todoRepository.findOneBy({ id: id });
   }
 }
