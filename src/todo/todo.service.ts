@@ -23,14 +23,23 @@ const init: CreateTodoDTO[] = [
 ];
 @Injectable()
 export default class TodoService implements ITodoDAO {
+  /**
+   *
+   * @param todoRepository The database repository to inject
+   */
   constructor(
     @InjectRepository(ETodo)
     private todoRepository: Repository<ETodo>,
   ) {}
   private readonly todos: Todo[] = init;
 
-  deleteTodo(todo: Todo): Todo {
-    throw new Error('Method not implemented.');
+  /**
+   *
+   * @param id The id of the todo to be deleted
+   * @returns Delete results
+   */
+  deleteTodo(id: number) {
+    return this.todoRepository.delete({ id });
   }
 
   updateTodo<K extends keyof UpdateTodoDTO>(
@@ -55,14 +64,29 @@ export default class TodoService implements ITodoDAO {
     }
   }
 
+  /**
+   *
+   * @param id The id of the todo to be updated
+   * @param payload The new todo object
+   * @returns Promise<UpdateResults>
+   */
   updateSingleTodo(id: number, payload: UpdateTodoDTO) {
-    return this.todoRepository.update({ id: id }, payload);
+    return this.todoRepository.update({ id }, payload);
   }
 
+  /**
+   *
+   * @returns A promise that resolves to all Todos.
+   */
   findAllTodos(): Promise<ETodo[]> {
     return this.todoRepository.find();
   }
 
+  /**
+   *
+   * @param createTodoDto The todo object to be created
+   * @returns Insert results
+   */
   addTodo(createTodoDto: CreateTodoDTO) {
     return this.todoRepository.insert(createTodoDto);
   }
