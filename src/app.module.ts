@@ -5,6 +5,8 @@ import TodoModule from './apps/todo/todo.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { Todo } from './apps/todo/todo.entity';
+import { UserModule } from './apps/user/user.module';
+import { User } from './apps/user/data/user.entity';
 
 @Module({
   imports: [
@@ -15,10 +17,11 @@ import { Todo } from './apps/todo/todo.entity';
       username: 'root',
       password: 'password',
       database: 'todo',
-      entities: [Todo],
+      entities: [Todo, User],
       synchronize: true,
     }),
     TodoModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
