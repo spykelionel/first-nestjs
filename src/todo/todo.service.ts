@@ -5,7 +5,7 @@ import { ITodoDAO } from './dao/todo-dao';
 import { UpdateTodoDTO } from './dto/update-todo.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Todo as ETodo } from './todo.entity';
-import { InsertResult, Repository, UpdateResult } from 'typeorm';
+import { DeleteResult, InsertResult, Repository, UpdateResult } from 'typeorm';
 
 const init: CreateTodoDTO[] = [
   {
@@ -39,8 +39,12 @@ export default class TodoService implements ITodoDAO {
    * @param id The id of the todo to be deleted
    * @returns Delete results
    */
-  deleteTodo(id: number) {
-    return this.todoRepository.delete({ id });
+  deleteTodo(id: number): Promise<DeleteResult> {
+    return this.todoRepository
+      .createQueryBuilder()
+      .delete()
+      .where('id = :id', { id })
+      .execute();
   }
 
   /**
