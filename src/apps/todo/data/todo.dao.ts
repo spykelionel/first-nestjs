@@ -1,8 +1,7 @@
 import { DeleteResult, InsertResult } from 'typeorm';
 import { Todo } from '../Todo';
-import CreateTodoDTO from '../dto/create-todo.dto';
-import { UpdateTodoDTO } from '../dto/update-todo.dto';
-import { Todo as ETodo } from '../todo.entity';
+import { CreateTodoDTO, UpdateTodoDTO } from './todo.dto';
+import { Todo as ETodo } from './todo.entity';
 
 export interface ITodoDAO {
   getSingleTodo(id: number): Promise<ETodo> | undefined;

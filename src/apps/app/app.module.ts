@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import TodoModule from '../todo/todo.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { Todo } from '../todo/todo.entity';
+import { Todo } from '../todo/data/todo.entity';
 import { UserModule } from '../user/user.module';
 import { User } from '../user/data/user.entity';
 
