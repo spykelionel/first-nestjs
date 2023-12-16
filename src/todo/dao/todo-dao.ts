@@ -1,11 +1,12 @@
 import { Todo } from '../Todo';
 import CreateTodoDTO from '../dto/create-todo.dto';
 import { UpdateTodoDTO } from '../dto/update-todo.dto';
+import { Todo as ETodo } from '../todo.entity';
 
 export interface ITodoDAO {
-  getTodoById(id: number): Todo | undefined;
-  createTodo(todo: CreateTodoDTO): CreateTodoDTO;
+  getSingleTodo(id: number): Promise<ETodo> | undefined;
+  addTodo(todo: CreateTodoDTO);
   deleteTodo(todo: Todo): Todo;
   updateTodo(id: number, payload: UpdateTodoDTO): Todo | undefined | string;
-  getAllTodos(): Todo[];
+  findAllTodos(): Promise<ETodo[]>;
 }
