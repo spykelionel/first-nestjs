@@ -23,8 +23,8 @@ export default class TodoController {
   }
 
   @Put(':id')
-  updateTodo(@Param('id') id: number, payload: UpdateTodoDTO): Todo | String {
-    return this.todoService.updateTodo(id, payload);
+  updateTodo(@Param('id') id: number, payload: UpdateTodoDTO) {
+    return this.todoService.updateSingleTodo(id, payload);
   }
 
   @Post('many')
