@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Todo } from './Todo';
+import { Todo } from './data/Todo';
 import { CreateTodoDTO, UpdateTodoDTO } from './data/todo.dto';
 import { ITodoDAO } from './data/todo.dao';
 import { InjectRepository } from '@nestjs/typeorm';

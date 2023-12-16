@@ -1,5 +1,5 @@
 import { DeleteResult, InsertResult, UpdateResult } from 'typeorm';
-import { Todo } from '../Todo';
+import { Todo } from './Todo';
 import { CreateTodoDTO, UpdateTodoDTO } from './todo.dto';
 import { Todo as ETodo } from './todo.entity';
 
