@@ -5,7 +5,7 @@ import { ITodoDAO } from './dao/todo-dao';
 import { UpdateTodoDTO } from './dto/update-todo.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Todo as ETodo } from './todo.entity';
-import { Repository } from 'typeorm';
+import { InsertResult, Repository, UpdateResult } from 'typeorm';
 
 const init: CreateTodoDTO[] = [
   {
@@ -24,7 +24,8 @@ const init: CreateTodoDTO[] = [
 @Injectable()
 export default class TodoService implements ITodoDAO {
   /**
-   *
+   * A constructor responsible for injecting dependencies
+   * of the TodoService.
    * @param todoRepository The database repository to inject
    */
   constructor(
@@ -42,6 +43,13 @@ export default class TodoService implements ITodoDAO {
     return this.todoRepository.delete({ id });
   }
 
+  /**
+   * This is a native implementation of the update(todo) method.
+   * It updates just the fields specified in the payload.
+   * @param id The id of the todo to be updated
+   * @param payload The new todo object
+   * @returns an updated Todo
+   */
   updateTodo<K extends keyof UpdateTodoDTO>(
     id: number,
     payload: Pick<UpdateTodoDTO, K>,
@@ -68,10 +76,22 @@ export default class TodoService implements ITodoDAO {
    *
    * @param id The id of the todo to be updated
    * @param payload The new todo object
-   * @returns Promise<UpdateResults>
+   * @returns Promise<UpdateResult>
    */
-  updateSingleTodo(id: number, payload: UpdateTodoDTO) {
-    return this.todoRepository.update({ id }, payload);
+  updateSingleTodo(id: number, payload: UpdateTodoDTO): Promise<UpdateResult> {
+    // Ensure that payload is an object with at least one field set
+    if (Object.keys(payload).length === 0) {
+      return Promise.reject(
+        new Error('Update payload must have at least one field set.'),
+      );
+    }
+
+    return this.todoRepository
+      .createQueryBuilder()
+      .update(ETodo)
+      .set(payload)
+      .where('id = :id', { id })
+      .execute();
   }
 
   /**
@@ -87,7 +107,7 @@ export default class TodoService implements ITodoDAO {
    * @param createTodoDto The todo object to be created
    * @returns Insert results
    */
-  addTodo(createTodoDto: CreateTodoDTO) {
+  addTodo(createTodoDto: CreateTodoDTO): Promise<InsertResult> {
     return this.todoRepository.insert(createTodoDto);
   }
 
