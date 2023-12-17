@@ -1,3 +1,4 @@
+import * as path from 'path';
 import { DataSource, DataSourceOptions } from 'typeorm';
 
 export const dataSourceOptions: DataSourceOptions = {
@@ -7,8 +8,8 @@ export const dataSourceOptions: DataSourceOptions = {
   username: 'root',
   password: 'password',
   database: 'todo',
-  entities: ['../../../dist/apps/**/data/*.entity.js'],
-  migrations: ['../../../dist/db/migration/*.js'],
+  entities: [path.join(__dirname, 'dist/**/*.entity.js')],
+  migrations: [path.join(__dirname, 'dist/db/migrations/*.js')],
 };
 
 const dataSource = new DataSource(dataSourceOptions);
