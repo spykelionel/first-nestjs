@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './data/user.entity';
 import { DeleteResult, InsertResult, Repository, UpdateResult } from 'typeorm';
 import { IUserDAO } from './data/user.dao';
 import { CreateUserDTO, UpdateUserDTO } from './data/user.dto';
+import { User } from './data/user.entity';
 
 @Injectable()
 export class UserService implements IUserDAO {

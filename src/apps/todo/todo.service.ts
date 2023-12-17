@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { Todo } from './data/Todo';
-import { CreateTodoDTO, UpdateTodoDTO } from './data/todo.dto';
-import { ITodoDAO } from './data/todo.dao';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Todo as ETodo } from './data/todo.entity';
 import { DeleteResult, InsertResult, Repository, UpdateResult } from 'typeorm';
+import { Todo } from './data/Todo';
+import { ITodoDAO } from './data/todo.dao';
+import { CreateTodoDTO, UpdateTodoDTO } from './data/todo.dto';
+import { Todo as ETodo } from './data/todo.entity';
 
 /**
  * A dummy structure of a todo
